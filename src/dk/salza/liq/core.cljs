@@ -155,7 +155,9 @@
                       "in navigation mode, "
                       "to evaluate the expression:\n"
                       "(range 10 30)\n"
+                      "(clojure.core/range 10 30)\n"
                       "(editor/end-of-buffer)\n"
+                      "(dk.salza.liq.editor/end-of-buffer)\n"
                      ))
   (editor/end-of-buffer))
 

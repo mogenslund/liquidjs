@@ -21,7 +21,10 @@
             [dk.salza.liq.coreutil :as coreutil]
             [dk.salza.liq.logging :as logging]
             [dk.salza.liq.tools.cshell :as cshell]
-            [lumo.repl :as lumo]
+            [cljs.tools.reader :refer [read-string]]
+            [cljs.js :refer [empty-state eval js-eval]]
+            [cljs.env :refer [*compiler*]]
+            [cljs.pprint :refer [pprint]]
             [clojure.string :as str]))
 
 (def top-of-window
@@ -863,7 +866,20 @@
 
 (defn eval-sexp
   [sexp]
-  (println (lumo/eval '(+ 1 2)))
+  (println
+  (eval (empty-state)
+        (read-string sexp)
+        {:eval       js-eval
+         :source-map true
+         :context    :expr}
+  (fn [result] result)))
+
+;;  Evaluate JavaScript
+;;  ===================
+
+;;  (println (js/eval "1 + 2 + 3"))
+
+
 ;;  (let [isprompt (= (get-name) "-prompt-")
 ;;        namespace (or (clojureutil/get-namespace (current-buffer)) "user")]
 ;;    (when isprompt (other-window))
