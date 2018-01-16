@@ -5,7 +5,7 @@
             [dk.salza.liq.apps.promptapp :as promptapp]
             [dk.salza.liq.apps.textapp :as textapp]
             [dk.salza.liq.apps.typeaheadapp :as typeaheadapp]
-            [dk.salza.liq.coreutil :refer :all]
+            [dk.salza.liq.coreutil :as coreutil]
             [clojure.string :as str]))
 
 
@@ -86,8 +86,9 @@
 (defn function-typeahead
   []
   (editor/previous-buffer)
-  (let [funcs (apply concat (for [n (all-ns)] (for [f (keys (ns-publics n))] (str n "/" f))))]
-    (typeaheadapp/run funcs str #(editor/insert (simplify %)))))
+;  (let [funcs (apply concat (for [n (all-ns)] (for [f (keys (ns-publics n))] (str n "/" f))))]
+;    (typeaheadapp/run funcs str #(editor/insert (simplify %))))
+  )
 
 (defn update-search
   [ch]

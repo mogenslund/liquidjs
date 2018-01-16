@@ -4,7 +4,7 @@
   function to display and filter the list."
   (:require [dk.salza.liq.editor :as editor]
             [dk.salza.liq.keys :as keys]
-            [dk.salza.liq.coreutil :refer :all]
+            [dk.salza.liq.coreutil :as coreutil]
             [clojure.string :as str]))
 
 (def state (atom {::tostringfun nil

@@ -2,6 +2,7 @@
   (:require ;; [clojure.java.io :as io]
             [clojure.string :as str]
             [dk.salza.liq.adapters.tty :as tty]
+            [dk.salza.liq.adapters.web :as web]
 ;;            [dk.salza.liq.adapters.jframeadapter :as jframeadapter]
 ;;            [dk.salza.liq.adapters.jframeadapter2 :as jframeadapter2]
 ;;            [dk.salza.liq.adapters.ghostadapter :as ghostadapter]
@@ -141,24 +142,42 @@
   (editor/insert logo)
   (editor/other-window)
   (editor/switch-to-buffer "scratch")
-  (editor/insert (str "# Welcome to λiquid\n"
-                      "To quit press C-q. To escape situation press C-g."
-                      "To undo press u in navigation mode (blue cursor)\n"
-                      "Use tab to switch between insert mode (green cursor) "
-                      "and navigation mode (blue cursor).\n\n"
-                      "## Basic navigation\nIn navigation mode (blue cursor):\n\n"
-                      "  j: Left\n  l: Right\n  i: Up\n  k: Down\n\n"
-                      "  C-space: Command typeahead (escape with C-g)\n"
-                      "  C-f: Find file\n\n"
-                      "## Evaluation\n"
-                      "Place cursor between the parenthesis below and type \"e\" "
-                      "in navigation mode, "
-                      "to evaluate the expression:\n"
-                      "(range 10 30)\n"
-                      "(clojure.core/range 10 30)\n"
-                      "(editor/end-of-buffer)\n"
-                      "(dk.salza.liq.editor/end-of-buffer)\n"
-                     ))
+  (editor/insert (str
+    "# Welcome to λiquid the JS version"
+    "This is a very experimental version of Liquid. Just to see what functionality would work in a browser using Clojurescript.\n"
+    "\n"
+    "## Basic Keybindings\n"
+    "\n"
+    "  Tab: Switch between navigation mode (blue cursor) and insert mode (green cursor)\n"
+    "\n"
+    "In navigation mode (blue cursor):\n"
+    "\n"
+    "  j: Left\n"
+    "  l: Right\n"
+    "  i: Up\n"
+    "  k: Down\n"
+    "\n"
+    "  1: Highlight s-expression near cursor\n"
+    "  e: Evaluate s-expression near cursor\n"
+    "\n"
+    "\n"
+    "## Evaluation\n"
+    "Place cursor between the parenthesis below and type \"e\" in navigation mode, to evaluate the expression:\n"
+    "\n"
+    "(ns cljs.user)\n"
+    "(require '[dk.salza.liq.editor :as editor])\n"
+    "\n"
+    "(def a 100):\n"
+    "(str \"a: \" a):\n"
+    "(range 10 30)\n"
+    "(editor/end-of-buffer)\n"
+    "\n"
+    "Evaluate this to make F5 key an eval shortcut:\n"
+    "(editor/set-global-key :f5 editor/eval-last-sexp)\n"
+    "\n"
+    "Evaluate this to make F3 an end of buffer shortcut:\n"
+    "(editor/set-global-key :f3 editor/end-of-buffer)\n"
+    ))
   (editor/end-of-buffer))
 
 
@@ -172,7 +191,7 @@
   otherwise nil."
   [args arg]
   (first (filter identity
-                 (map #(re-find (re-pattern (str "(?<=" arg ").*"))
+                 (map #(re-find (re-pattern (str arg))
                                 %)
                       args))))
 
@@ -221,11 +240,11 @@
   [& args]
   ;; If arguments are --help or --version, just show information
   ;; and quit.
-  (cond (read-arg args "--help") (print-help-and-exit)
-        (read-arg args "--version") (print-version-and-exit)
+  (cond ; (read-arg args "--help") (print-help-and-exit)
+        ;(read-arg args "--version") (print-version-and-exit)
     :else
-    (let [usetty true
-          rows 40
+    (let [usetty (read-arg args "--tty") ;false ;(read-arg args "--tty")
+          rows 39
           columns 140
           singlethreaded (read-arg args "--no-threads")]
 
@@ -235,22 +254,19 @@
 
           ;; TTY is used as default view on Linux and Mac
           ;; JFrame is used on Windows
-          (tty/view-init)
-          (tty/input-handler)
 
-          ;; If specified load as web, server, html or JFrame
-;;          (when (or (read-arg args "--web") (read-arg args "--server"))
-;;            (((webadapter/adapter rows columns autoupdate) :init) port))
-;;          (when (read-arg args "--jframe")
-;;            (jframeadapter2/init rows columns :font-size fontsize))
-;;          (when (read-arg args "--jf2")
-;;            (jframeadapter/init rows columns))
+          (if usetty
+            (do
+              (tty/view-init)
+              (tty/input-handler))
+            (web/init))
 
           ;; Post that the editor has updated, to make view update
           (editor/updated))))
     
 (defn -main
   [& args]
+  (js/console.log "Starting ...")
   (apply startup args)
   (let [minimal (read-arg args "--minimal")
 ;        userfile false ;;(when-not (read-arg args "--no-init-file") 
@@ -264,6 +280,8 @@
     ;(load-user-file userfile)
     ;(when-let [filename (re-matches #"[^-].*" (or (last args) ""))]
     ;  (editor/find-file filename))
+    (editor/eval-sexp "(ns cljs.user)")
+    (editor/eval-sexp "(require '[dk.salza.liq.editor :as editor])")
     (editor/updated)))
 
-(-main)
+;(-main)

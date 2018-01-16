@@ -1,7 +1,7 @@
 (ns dk.salza.liq.apps.mdbrowserapp
-  (:require [clojure.java.io :as io]
+  (:require ;;[clojure.java.io :as io]
             [dk.salza.liq.buffer :as buffer]
-            [dk.salza.liq.slider :refer :all]
+            [dk.salza.liq.slider :as slider]
             [dk.salza.liq.editor :as editor]
             [dk.salza.liq.keys :as keys]
             [dk.salza.liq.apps.promptapp :as promptapp]
@@ -9,7 +9,7 @@
             [dk.salza.liq.extensions.linenavigator]
             [dk.salza.liq.syntaxhl.clojuremdhl :as clojuremdhl]
             [dk.salza.liq.logging :as logging]
-            [dk.salza.liq.coreutil :refer :all]))
+            [dk.salza.liq.coreutil :as coreutil]))
 
 (def navigate (atom nil))
 
@@ -110,6 +110,8 @@
     (let [sl (buffer/get-slider (editor/current-buffer))
           link (markdown-link sl)]
       (logging/log "MDBROWSERLINK" link)
-      (if (.isAbsolute (io/file link))
+      ;;(if (.isAbsolute (io/file link))
         (run link)
-        (run (str (io/file (editor/get-folder) link)))))))
+      ;;  (run (str (io/file (editor/get-folder) link)))
+      ;;   )
+      )))

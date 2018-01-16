@@ -4,7 +4,7 @@
             [dk.salza.liq.renderer :as renderer]
             [dk.salza.liq.editor :as editor]
             [dk.salza.liq.logging :as logging]
-            [cljs.nodejs :as nodejs]
+            ;;[cljs.nodejs :as nodejs]
             [clojure.string :as str]))
 
 (def old-lines (atom {}))

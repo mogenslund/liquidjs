@@ -7,16 +7,17 @@
 ;;  (:import [java.lang ProcessBuilder]
 ;;           [java.util.concurrent TimeUnit]))
 
-(def spawn (.-spawn (js/require "child_process")))
+;(def spawn (.-spawn (js/require "child_process")))
 
 (defn cmd
   [& args]
-  (let [out (atom "")
-        p (spawn (first args) (rest args))]
-    (.on (.-stdout p) "data"  (fn [s] (swap! out #(str %1 s))))
-    (.on (.-stderr p) "data"  (fn [s] (swap! out #(str %1 s))))
-    (.on p "close" (fn [s] (swap! out #(str %1 s))))
-  @out))
+;  (let [out (atom "")
+;        p (spawn (first args) (rest args))]
+;    (.on (.-stdout p) "data"  (fn [s] (swap! out #(str %1 s))))
+;    (.on (.-stderr p) "data"  (fn [s] (swap! out #(str %1 s))))
+;    (.on p "close" (fn [s] (swap! out #(str %1 s))))
+;  @out)
+  )
 
 (defn datetimestamp
   "Todays date in yyyy-mm-dd-HH-mm-ss format"

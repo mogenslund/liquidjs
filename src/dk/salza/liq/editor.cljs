@@ -349,6 +349,7 @@
   the current buffer, otherwise nil."
   []
   (if-let [filepath (get-filename)]
+    (do)
 ;;    (str (.getParent (io/file filepath)))
   ))
 
@@ -864,15 +865,16 @@
   )
   ([] (when-let [filepath (get-filename)] (evaluate-file filepath))))
 
+(def eval-state (empty-state))
+
 (defn eval-sexp
   [sexp]
-  (println
-  (eval (empty-state)
+  (eval eval-state ;(empty-state)
         (read-string sexp)
         {:eval       js-eval
          :source-map true
          :context    :expr}
-  (fn [result] result)))
+    (fn [result] (prompt-set (result :value)))))
 
 ;;  Evaluate JavaScript
 ;;  ===================
@@ -894,7 +896,6 @@
 ;;              ") " sexp ")")))
 ;;        (catch Exception e (do (logging/log e) (println (util/pretty-exception e)))))
 ;;      ))
-  )
 
 (defn eval-safe
   [fun]

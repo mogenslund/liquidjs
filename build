@@ -1,0 +1,1 @@
+java -cp "/home/mogens/Downloads/cljs.jar:src" clojure.main build.clj
