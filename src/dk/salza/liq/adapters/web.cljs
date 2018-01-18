@@ -19,27 +19,28 @@
              content (str "<span class=\"bgstatusline\"> </span><span class=\"plain bgplain\">"
                      (str/join (for [c (line :line)] (if (string? c) c (str "</span><span class=\"" (name (c :face)) " bg" (name (c :bgface)) "\">"))))
                      "</span>")]
-         ;(when (not= (@old-lines key) content)
+         (when (not= (@old-lines key) content)
            (-> js/document
                (.getElementById key)
                (.-innerHTML)
                (set! content))
-         ;  (swap! old-lines assoc key content))
+           (swap! old-lines assoc key content))
          ))))
 
 (defn view-handler
   [key reference old new]
-  (remove-watch editor/editor key)
+;  (remove-watch editor/editor key)
   (when (editor/fullupdate?) (reset))
   (update-view)
-  (add-watch editor/updates key view-handler))
+;  (add-watch editor/updates key view-handler)
+)
 
 (defn key-to-keyword
   [evt]
   (let [key (.-key evt)
         keynum (.-which evt)
         ctrl (if (.-ctrlKey evt) "C-" "")
-        meta (if (.-ctrlKey evt) "M-" "")
+        meta (if (.-altKey evt) "M-" "")
         resolvekey (cond (= key "Tab") "tab"
                          (= key "Enter") "enter"
                          (= key "Backspace") "backspace"

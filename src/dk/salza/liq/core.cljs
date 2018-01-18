@@ -13,7 +13,7 @@
 ;;            [dk.salza.liq.apps.findfileapp :as findfileapp]
             [dk.salza.liq.apps.textapp :as textapp]
             [dk.salza.liq.apps.promptapp :as promptapp]
-;;            [dk.salza.liq.apps.commandapp :as commandapp]
+            [dk.salza.liq.apps.commandapp :as commandapp]
 ;;            [dk.salza.liq.apps.helpapp :as helpapp]
             [dk.salza.liq.editor :as editor]
             [dk.salza.liq.logging :as logging])
@@ -89,7 +89,7 @@
   (editor/set-default-app textapp/run)
 
   ;; Default global keybindings
-;;  (editor/set-global-key :C-space #(do (editor/request-fullupdate) (commandapp/run)))
+  (editor/set-global-key :C-space #(do (editor/request-fullupdate) (commandapp/run)))
   (editor/set-global-key :C-q editor/quit)
   (editor/set-global-key :C-M-q editor/force-quit)
 ;;  (editor/set-global-key :C-f #(findfileapp/run editor/find-file))
